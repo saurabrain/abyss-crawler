@@ -6,23 +6,11 @@ export class Camera {
     this.viewH = viewH;
   }
 
-  follow(target, mapPixelW, mapPixelH, mouseWorldX, mouseWorldY, dt) {
-    // Look-ahead toward the mouse: player can see further in the direction they're aiming
-    let lookX = 0, lookY = 0;
-    if (mouseWorldX !== undefined) {
-      const dx = mouseWorldX - target.x;
-      const dy = mouseWorldY - target.y;
-      const len = Math.sqrt(dx * dx + dy * dy);
-      if (len > 1) {
-        const amt = Math.min(140, len * 0.35);
-        lookX = (dx / len) * amt;
-        lookY = (dy / len) * amt;
-      }
-    }
-    const desiredX = target.x + lookX - this.viewW / 2;
-    const desiredY = target.y + lookY - this.viewH / 2;
-    // Fast but still eased follow
-    const speed = 14;
+  follow(target, mapPixelW, mapPixelH, dt) {
+    // Camera centers on player — no mouse look-ahead
+    const desiredX = target.x - this.viewW / 2;
+    const desiredY = target.y - this.viewH / 2;
+    const speed = 8;
     this.x += (desiredX - this.x) * Math.min(1, speed * dt);
     this.y += (desiredY - this.y) * Math.min(1, speed * dt);
     this.x = Math.max(0, Math.min(mapPixelW - this.viewW, this.x));
