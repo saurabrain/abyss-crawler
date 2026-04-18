@@ -101,6 +101,28 @@ export class Tilemap {
     };
   }
 
+  // Pick a floor tile in the given cardinal direction ('N'|'S'|'E'|'W') from (wx,wy).
+  spawnPointInDirection(wx, wy, direction, minDist = 260) {
+    const centerAngle = { N: -Math.PI / 2, S: Math.PI / 2, E: 0, W: Math.PI }[direction];
+    const spread = Math.PI / 2; // ±45° cone
+    for (let attempt = 0; attempt < 80; attempt++) {
+      const room = this.rooms[Math.floor(Math.random() * this.rooms.length)];
+      const tx = room.x + Math.floor(Math.random() * room.w);
+      const ty = room.y + Math.floor(Math.random() * room.h);
+      if (this.isSolid(tx, ty)) continue;
+      const px = tx * TILE_SIZE + TILE_SIZE / 2;
+      const py = ty * TILE_SIZE + TILE_SIZE / 2;
+      const dx = px - wx, dy = py - wy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < minDist) continue;
+      let diff = Math.atan2(dy, dx) - centerAngle;
+      while (diff >  Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      if (Math.abs(diff) <= spread) return { x: px, y: py };
+    }
+    return this.spawnPointFarFrom(wx, wy, minDist); // fallback
+  }
+
   // Pick a floor tile at least minDist pixels from the given world coords.
   spawnPointFarFrom(wx, wy, minDist = 360) {
     for (let attempt = 0; attempt < 60; attempt++) {
