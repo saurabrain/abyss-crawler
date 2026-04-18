@@ -33,33 +33,41 @@ export class Entity {
 
   moveWithCollision(map, dt) {
     const step = 2;
-    // Inset by 1px so corners don't catch on adjacent wall edges
     const hw = this.w / 2 - 1;
     const hh = this.h / 2 - 1;
+    // 4 px perpendicular inset: prevents a wall-boundary Y position from
+    // falsely blocking X movement (and vice versa), allowing wall sliding.
+    const PI = 4;
 
-    const stepsX = Math.max(1, Math.ceil(Math.abs(this.vx * dt) / step));
-    const dx = this.vx * dt / stepsX;
-    for (let i = 0; i < stepsX; i++) {
-      this.x += dx;
-      if (map.isSolidWorld(this.x - hw, this.y - hh) ||
-          map.isSolidWorld(this.x + hw, this.y - hh) ||
-          map.isSolidWorld(this.x - hw, this.y + hh) ||
-          map.isSolidWorld(this.x + hw, this.y + hh)) {
-        this.x -= dx;
-        this.vx = 0;
+    // X axis — leading edge only; Y test points inset by PI
+    if (this.vx !== 0) {
+      const stepsX = Math.max(1, Math.ceil(Math.abs(this.vx * dt) / step));
+      const dx = this.vx * dt / stepsX;
+      for (let i = 0; i < stepsX; i++) {
+        this.x += dx;
+        const ex = dx > 0 ? this.x + hw : this.x - hw;
+        if (map.isSolidWorld(ex, this.y - (hh - PI)) ||
+            map.isSolidWorld(ex, this.y + (hh - PI))) {
+          this.x -= dx;
+          this.vx = 0;
+          break;
+        }
       }
     }
 
-    const stepsY = Math.max(1, Math.ceil(Math.abs(this.vy * dt) / step));
-    const dy = this.vy * dt / stepsY;
-    for (let i = 0; i < stepsY; i++) {
-      this.y += dy;
-      if (map.isSolidWorld(this.x - hw, this.y - hh) ||
-          map.isSolidWorld(this.x + hw, this.y - hh) ||
-          map.isSolidWorld(this.x - hw, this.y + hh) ||
-          map.isSolidWorld(this.x + hw, this.y + hh)) {
-        this.y -= dy;
-        this.vy = 0;
+    // Y axis — leading edge only; X test points inset by PI
+    if (this.vy !== 0) {
+      const stepsY = Math.max(1, Math.ceil(Math.abs(this.vy * dt) / step));
+      const dy = this.vy * dt / stepsY;
+      for (let i = 0; i < stepsY; i++) {
+        this.y += dy;
+        const ey = dy > 0 ? this.y + hh : this.y - hh;
+        if (map.isSolidWorld(this.x - (hw - PI), ey) ||
+            map.isSolidWorld(this.x + (hw - PI), ey)) {
+          this.y -= dy;
+          this.vy = 0;
+          break;
+        }
       }
     }
   }
