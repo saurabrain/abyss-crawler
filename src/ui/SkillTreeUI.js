@@ -24,7 +24,7 @@ export class SkillTreeUI {
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 18px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('SKILL TREE  [Tab to close]', W / 2, 32);
+    ctx.fillText('SKILL TREE  [Esc to close]', W / 2, 32);
 
     ctx.fillStyle = '#f1c40f';
     ctx.font = '14px monospace';

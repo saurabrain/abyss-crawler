@@ -10,7 +10,7 @@ export class InputManager {
     window.addEventListener('keydown', e => {
       if (!this.keys[e.code]) this._justPressed[e.code] = true;
       this.keys[e.code] = true;
-      if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) e.preventDefault();
+      if (['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Tab'].includes(e.code)) e.preventDefault();
     });
     window.addEventListener('keyup', e => {
       this.keys[e.code] = false;
