@@ -145,8 +145,7 @@ export class GameplayState {
       }
     }
 
-    const mwp = camera.toWorld(input.mouse.x, input.mouse.y);
-    camera.follow(this.player, this.tilemap.pixelW, this.tilemap.pixelH, mwp.x, mwp.y, dt);
+    camera.follow(this.player, this.tilemap.pixelW, this.tilemap.pixelH, dt);
   }
 
   draw(game, ctx) {
