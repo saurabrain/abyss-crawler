@@ -26,9 +26,12 @@ test('[REG-004] SHAMAN aggroRange exceeds minSpawnDist', () => {
     `Shaman aggroRange ${SHAMAN_DEF.aggroRange} must be > minSpawnDist ${MIN_SPAWN_DIST}`);
 });
 
-test('[REG-004] enemy switches to chase state when player within aggroRange', () => {
-  // Simulate Enemy.update logic: dist < aggroRange → state = chase
-  const aggroRange = GRUNT_DEF.aggroRange;
-  const dist = MIN_SPAWN_DIST - 10; // player walks a bit closer
-  assert.ok(dist < aggroRange, 'enemy should aggro when player within range');
+test('[REG-004] enemy aggroRange is large enough to cover spawn distance immediately', () => {
+  // Enemies spawn at MIN_SPAWN_DIST; their first update must trigger chase not wander
+  assert.ok(GRUNT_DEF.aggroRange > MIN_SPAWN_DIST,
+    `Grunt aggroRange (${GRUNT_DEF.aggroRange}) must exceed minSpawnDist (${MIN_SPAWN_DIST})`);
+  assert.ok(ARCHER_DEF.aggroRange > MIN_SPAWN_DIST,
+    `Archer aggroRange (${ARCHER_DEF.aggroRange}) must exceed minSpawnDist (${MIN_SPAWN_DIST})`);
+  assert.ok(SHAMAN_DEF.aggroRange > MIN_SPAWN_DIST,
+    `Shaman aggroRange (${SHAMAN_DEF.aggroRange}) must exceed minSpawnDist (${MIN_SPAWN_DIST})`);
 });
