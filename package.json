@@ -1,0 +1,10 @@
+{
+  "name": "abyss-crawler",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Browser-based Path of Exile-inspired ARPG (Vanilla Canvas/JS)",
+  "scripts": {
+    "test": "node --test --import ./tests/_dom-stub.mjs tests/",
+    "serve": "python -m http.server 8080"
+  }
+}
