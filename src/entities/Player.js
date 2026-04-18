@@ -99,6 +99,7 @@ export class Player extends Entity {
 
     // Attack timer
     if (this._attackTimer > 0) this._attackTimer -= dt;
+    if (this._swingTimer  > 0) this._swingTimer  -= dt;
 
     // Battle Cry expiry (Warrior skill 3)
     if (this._battleCryTimer > 0) {

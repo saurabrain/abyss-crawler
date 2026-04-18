@@ -52,10 +52,21 @@ function drawWarrior(ctx, player) {
   ctx.fillRect(-1, -2, 3, 4);
   ctx.restore();
 
-  // Sword (right arm) — rotates to face mouse
+  // Sword (right arm) — rests at neutral angle; animates only during attack
+  const swingTimer = player?._swingTimer ?? 0;
+  const attackCd   = player?.attackCooldown ?? 0.55;
+  let swordAngle;
+  if (swingTimer > 0) {
+    // t: 0 = just swung, 1 = swing complete
+    const t = 1 - swingTimer / attackCd;
+    // Arc from pulled-back (facing - 90°) sweeping forward past facing
+    swordAngle = facing - Math.PI * 0.5 + t * Math.PI * 0.75;
+  } else {
+    swordAngle = Math.PI * 0.35; // resting: sword points down-right
+  }
   ctx.save();
   ctx.translate(10, 0);
-  ctx.rotate(facing);
+  ctx.rotate(swordAngle);
   // Arm
   ctx.fillStyle = '#f1c27d';
   ctx.fillRect(0, -2, 4, 4);
@@ -95,6 +106,7 @@ export const WARRIOR = {
   drawPlayer: drawWarrior,
 
   primaryAttack(player, target) {
+    player._swingTimer = player.attackCooldown ?? 0.55;
     // Wide arc swing — covers enemies flanking from either side
     player.pendingMeleeHit = {
       x: player.x + Math.cos(player.facingAngle) * 35,
