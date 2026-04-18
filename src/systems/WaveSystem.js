@@ -48,10 +48,9 @@ export class WaveSystem {
     const px = this.player?.x ?? 0;
     const py = this.player?.y ?? 0;
     const minSpawnDist = this.isBossStage ? 300 : 260;
-    const points = this.tilemap.spawnPointsFarFrom(this.enemiesPerWave, px, py, minSpawnDist);
 
     if (this.isBossStage) {
-      const center = points[0];
+      const center = this.tilemap.spawnPointFarFrom(px, py, minSpawnDist);
       const boss = new Enemy(center.x, center.y, scaleEnemy(BOSS_DEF, this.stage));
       // Patch in _defaultChase inline since we can't bind in plain def
       boss._defaultChaseInline = (player, self) => {
@@ -64,7 +63,10 @@ export class WaveSystem {
       this.enemies.push(boss);
     } else {
       const pool = pickPool(this.stage);
-      for (const pt of points) {
+      const dirs = ['N', 'S', 'E', 'W'];
+      for (let i = 0; i < this.enemiesPerWave; i++) {
+        const dir = dirs[i % 4];
+        const pt  = this.tilemap.spawnPointInDirection(px, py, dir, minSpawnDist);
         const def = pool[Math.floor(Math.random() * pool.length)];
         this.enemies.push(new Enemy(pt.x, pt.y, scaleEnemy(def, this.stage)));
       }
