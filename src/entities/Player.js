@@ -100,6 +100,15 @@ export class Player extends Entity {
     // Attack timer
     if (this._attackTimer > 0) this._attackTimer -= dt;
 
+    // Battle Cry expiry (Warrior skill 3)
+    if (this._battleCryTimer > 0) {
+      this._battleCryTimer -= dt;
+      if (this._battleCryTimer <= 0) {
+        this._battleCryTimer = 0;
+        this.bonusDamage = Math.max(0, this.bonusDamage - 20);
+      }
+    }
+
     // Skill cooldowns
     for (let i = 0; i < 4; i++) if (this.skillCooldowns[i] > 0) this.skillCooldowns[i] -= dt;
 

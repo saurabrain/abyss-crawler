@@ -32,14 +32,19 @@ export class Entity {
   }
 
   moveWithCollision(map, dt) {
-    const TS = 32;
     const step = 2;
+    // Inset by 1px so corners don't catch on adjacent wall edges
+    const hw = this.w / 2 - 1;
+    const hh = this.h / 2 - 1;
 
-    const steps = Math.max(1, Math.ceil(Math.abs(this.vx * dt) / step));
-    const dx = this.vx * dt / steps;
-    for (let i = 0; i < steps; i++) {
+    const stepsX = Math.max(1, Math.ceil(Math.abs(this.vx * dt) / step));
+    const dx = this.vx * dt / stepsX;
+    for (let i = 0; i < stepsX; i++) {
       this.x += dx;
-      if (map.isSolidWorld(this.left + 1, this.y) || map.isSolidWorld(this.right - 1, this.y)) {
+      if (map.isSolidWorld(this.x - hw, this.y - hh) ||
+          map.isSolidWorld(this.x + hw, this.y - hh) ||
+          map.isSolidWorld(this.x - hw, this.y + hh) ||
+          map.isSolidWorld(this.x + hw, this.y + hh)) {
         this.x -= dx;
         this.vx = 0;
       }
@@ -49,7 +54,10 @@ export class Entity {
     const dy = this.vy * dt / stepsY;
     for (let i = 0; i < stepsY; i++) {
       this.y += dy;
-      if (map.isSolidWorld(this.x, this.top + 1) || map.isSolidWorld(this.x, this.bottom - 1)) {
+      if (map.isSolidWorld(this.x - hw, this.y - hh) ||
+          map.isSolidWorld(this.x + hw, this.y - hh) ||
+          map.isSolidWorld(this.x - hw, this.y + hh) ||
+          map.isSolidWorld(this.x + hw, this.y + hh)) {
         this.y -= dy;
         this.vy = 0;
       }

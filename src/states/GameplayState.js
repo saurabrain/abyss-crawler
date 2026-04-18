@@ -77,6 +77,7 @@ export class GameplayState {
     // UI toggles
     if (input.isJustPressed('Tab')) { this.skillUI.toggle(); this.invUI.visible = false; }
     if (input.isJustPressed('KeyI')) { this.invUI.toggle(); this.skillUI.visible = false; }
+    if (input.isJustPressed('Escape')) { this.skillUI.visible = false; this.invUI.visible = false; }
 
     const uiOpen = this.skillUI.visible || this.invUI.visible;
 
