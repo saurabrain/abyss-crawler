@@ -6,6 +6,8 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import '../../tests/_dom-stub.mjs';
 import { SkillTreeUI } from '../../src/ui/SkillTreeUI.js';
 
@@ -22,10 +24,8 @@ test('[REG-001] SkillTreeUI.toggle opens and can be closed by setting visible=fa
 });
 
 test('[REG-001] SkillTreeUI hint text contains Esc, not Tab', () => {
-  // We verify the draw hint by checking the source at test-time via string comparison.
-  // The actual rendering is a no-op in Node; this guards against regression in the label.
-  const src = (await import('node:fs')).readFileSync(
-    new URL('../../src/ui/SkillTreeUI.js', import.meta.url), 'utf8'
+  const src = readFileSync(
+    fileURLToPath(new URL('../../src/ui/SkillTreeUI.js', import.meta.url)), 'utf8'
   );
   assert.ok(src.includes('Esc to close'), 'hint must say "Esc to close", not "Tab to close"');
 });
