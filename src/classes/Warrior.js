@@ -95,15 +95,15 @@ export const WARRIOR = {
   drawPlayer: drawWarrior,
 
   primaryAttack(player, target) {
-    // Melee arc swing
+    // Wide arc swing — covers enemies flanking from either side
     player.pendingMeleeHit = {
-      x: player.x + Math.cos(player.facingAngle) * 40,
-      y: player.y + Math.sin(player.facingAngle) * 40,
-      r: 50,
+      x: player.x + Math.cos(player.facingAngle) * 35,
+      y: player.y + Math.sin(player.facingAngle) * 35,
+      r: 65,
       damage: player.totalDamage,
       lifesteal: 0.1,
       angle: player.facingAngle,
-      arc: Math.PI * 0.8,
+      arc: Math.PI * 1.1, // ~198° — wide enough to catch flankers
     };
   },
 
