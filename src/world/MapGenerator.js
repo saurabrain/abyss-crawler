@@ -55,7 +55,7 @@ function collectRooms(node, rooms) {
   if (node.right) collectRooms(node.right, rooms);
 }
 
-function carveCorridors(node, grid) {
+function carveCorridors(node, grid, rows, cols) {
   if (!node.left || !node.right) return;
   const l = getRoom(node.left);
   const r = getRoom(node.right);
@@ -64,17 +64,24 @@ function carveCorridors(node, grid) {
   const rx = Math.floor(r.x + r.w / 2);
   const ry = Math.floor(r.y + r.h / 2);
 
+  // Carve 3-tile-wide corridors so a 20×20 player can navigate corners freely
   let cx = lx, cy = ly;
   while (cx !== rx) {
-    grid[cy][cx] = TILE.CORRIDOR;
+    for (let oy = -1; oy <= 1; oy++) {
+      const row = cy + oy;
+      if (row > 0 && row < rows - 1) grid[row][cx] = TILE.CORRIDOR;
+    }
     cx += cx < rx ? 1 : -1;
   }
   while (cy !== ry) {
-    grid[cy][cx] = TILE.CORRIDOR;
+    for (let ox = -1; ox <= 1; ox++) {
+      const col = cx + ox;
+      if (col > 0 && col < cols - 1) grid[cy][col] = TILE.CORRIDOR;
+    }
     cy += cy < ry ? 1 : -1;
   }
-  carveCorridors(node.left, grid);
-  carveCorridors(node.right, grid);
+  carveCorridors(node.left, grid, rows, cols);
+  carveCorridors(node.right, grid, rows, cols);
 }
 
 export function generateMap(cols = 80, rows = 60) {
@@ -92,7 +99,7 @@ export function generateMap(cols = 80, rows = 60) {
         grid[ry][rx] = TILE.FLOOR;
   }
 
-  carveCorridors(root, grid);
+  carveCorridors(root, grid, rows, cols);
 
   // Place portal in last room
   const lastRoom = rooms[rooms.length - 1];

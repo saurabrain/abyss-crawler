@@ -78,7 +78,7 @@ function drawBoss(ctx, enemy) {
 export const GRUNT_DEF = {
   name: 'Grunt', w: 20, h: 20,
   hp: 40, speed: 90, damage: 8, attackCooldown: 0.9,
-  aggroRange: 200, attackRange: 28,
+  aggroRange: 350, attackRange: 28,
   xpReward: 8, lootChance: 0.15,
   drawEnemy: drawGrunt,
   attackLogic(enemy, player) {
@@ -89,7 +89,7 @@ export const GRUNT_DEF = {
 export const ARCHER_DEF = {
   name: 'Archer', w: 18, h: 22,
   hp: 28, speed: 70, damage: 10, attackCooldown: 1.4,
-  aggroRange: 280, attackRange: 250,
+  aggroRange: 380, attackRange: 250,
   xpReward: 12, lootChance: 0.2,
   drawEnemy: drawArcher,
   chaseLogic(enemy, player, dt) {
@@ -125,7 +125,7 @@ export const ARCHER_DEF = {
 export const SHAMAN_DEF = {
   name: 'Shaman', w: 18, h: 18,
   hp: 35, speed: 55, damage: 5, attackCooldown: 2.5,
-  aggroRange: 300, attackRange: 280,
+  aggroRange: 400, attackRange: 280,
   xpReward: 18, lootChance: 0.35,
   drawEnemy: drawShaman,
   chaseLogic(enemy, player, dt) {
