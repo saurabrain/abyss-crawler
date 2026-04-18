@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import './_dom-stub.mjs';
 import { generateMap, TILE, TILE_SIZE } from '../src/world/MapGenerator.js';
 import { Tilemap } from '../src/world/Tilemap.js';
 
